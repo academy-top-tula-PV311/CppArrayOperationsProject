@@ -1,6 +1,61 @@
 ﻿#include <iostream>
 
 void MinVars();
+void ArrayInit(int array[], int size);
+void ArrayPrint(int array[], int size);
+void ArrayInitPrint(int array[], int size);
+int ArrayAmount(int array[], int size);
+bool FirstMin(int a, int b);
+int ArrayMinValue(int array[], int size);
+int ArrayMinIndex(int array[], int size);
+void ArrayReverse(int array[], int size);
+void ArrayShiftLeft(int array[], int size, int steps);
+
+void ArraySortSelect(int array[], int size);
+void ArraySortBubble(int array[], int size);
+void ArraySortShacker(int array[], int size);
+void ArraySortInsert(int array[], int size);
+
+int main()
+{
+    srand(time(nullptr));
+
+    const int size{ 10 };
+    int array[size];
+
+    ArrayInit(array, size);
+    ArrayPrint(array, size);
+
+    std::cout << "Min index: " << ArrayMinIndex(array, size)
+        << " Min value: " << ArrayMinValue(array, size) << "\n";
+
+    ArrayReverse(array, size);
+    ArrayPrint(array, size);
+
+    //int steps{ 123 };
+    //steps = steps % size;
+    
+    ArraySortInsert(array, size);
+    ArrayPrint(array, size);
+}   
+
+
+void MinVars()
+{
+    int a, b, c, d;
+    std::cout << "input 4 numbers: ";
+    std::cin >> a >> b >> c >> d;
+
+    int min = a;
+
+    if (min > b)
+        min = b;
+    if (min > c)
+        min = c;
+    if (min > d)
+        min = d;
+    std::cout << min << "\n";
+}
 
 void ArrayInit(int array[], int size)
 {
@@ -63,26 +118,9 @@ void ArrayReverse(int array[], int size)
     }
 }
 
-int main()
+void ArrayShiftLeft(int array[], int size, int steps)
 {
-    srand(time(nullptr));
-
-    const int size{ 10 };
-    int array[size];
-
-    ArrayInit(array, size);
-    ArrayPrint(array, size);
-
-    std::cout << "Min index: " << ArrayMinIndex(array, size)
-        << " Min value: " << ArrayMinValue(array, size) << "\n";
-
-    ArrayReverse(array, size);
-    ArrayPrint(array, size);
-
-    int steps{ 123 };
-    //steps = steps % size;
     steps %= size;
-
 
     for (int s{}; s < steps; s++)
     {
@@ -91,24 +129,100 @@ int main()
             array[i] = array[i + 1];
         array[size - 1] = temp;
     }
+}
 
-    ArrayPrint(array, size);
-}   
-
-
-void MinVars()
+void ArraySortSelect(int array[], int size)
 {
-    int a, b, c, d;
-    std::cout << "input 4 numbers: ";
-    std::cin >> a >> b >> c >> d;
+    int indexMin;
+    int temp;
 
-    int min = a;
+    for (int i{}; i < size - 1; i++) // left array's border
+    {
+        indexMin = i;
+        for (int j{ i + 1 }; j < size; j++) // search min index
+            if (array[indexMin] > array[j])
+                indexMin = j;
+        temp = array[i]; // swap
+        array[i] = array[indexMin];
+        array[indexMin] = temp;
+    }
+}
 
-    if (min > b)
-        min = b;
-    if (min > c)
-        min = c;
-    if (min > d)
-        min = d;
-    std::cout << min << "\n";
+void ArraySortBubble(int array[], int size)
+{
+    int temp;
+    bool isSort;
+
+    for (int i{}; i < size - 1; i++)
+    {
+        isSort = true;
+        for(int j{size - 1}; j > i; j--)
+            if (array[j] < array[j - 1])
+            {
+                temp = array[j];
+                array[j] = array[j - 1];
+                array[j - 1] = temp;
+                isSort = false;
+            }
+        if (isSort)
+            break;
+    }
+}
+
+void ArraySortShacker(int array[], int size)
+{
+    int top{ 0 };
+    int bottom{ size - 1 };
+    
+    int temp;
+    bool isSort;
+
+    while (top < bottom)
+    {
+        isSort = true;
+        for (int i{ bottom }; i > top; i--)
+        {
+            if (array[i] < array[i - 1])
+            {
+                temp = array[i];
+                array[i] = array[i - 1];
+                array[i - 1] = temp;
+                isSort = false;
+            }
+        }
+        if (isSort)
+            break;
+        top++;
+
+        isSort = true;
+        for (int i{ top }; i < bottom; i++)
+        {
+            if (array[i] > array[i + 1])
+            {
+                temp = array[i];
+                array[i] = array[i + 1];
+                array[i + 1] = temp;
+                isSort = false;
+            }
+        }
+        if (isSort)
+            break;
+        bottom--;
+    }
+}
+
+void ArraySortInsert(int array[], int size)
+{
+    int temp;
+    int j;
+    for (int i{ 1 }; i < size; i++)
+    {
+        temp = array[i];
+        for (j = i; j > 0; j--)
+            if (array[j - 1] > temp)
+                array[j] = array[j - 1];
+            else
+                break;
+        array[j] = temp;
+    }
 }
