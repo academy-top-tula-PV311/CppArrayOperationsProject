@@ -16,6 +16,9 @@ void ArraySortBubble(int array[], int size);
 void ArraySortShacker(int array[], int size);
 void ArraySortInsert(int array[], int size);
 
+int ArraySearchLine(int array[], int size, int key);
+int ArraySearchBin(int array[], int size, int key);
+
 int main()
 {
     srand(time(nullptr));
@@ -24,8 +27,26 @@ int main()
     int array[size];
 
     ArrayInit(array, size);
+    ArraySortShacker(array, size);
     ArrayPrint(array, size);
 
+    int key;
+    std::cout << "Input key of search: ";
+    std::cin >> key;
+
+    int index = ArraySearchLine(array, size, key);
+    if (index >= 0)
+        std::cout << "Found. Index = " << index << "\n";
+    else
+        std::cout << "Not found\n";
+
+    index = ArraySearchBin(array, size, key);
+    if (index >= 0)
+        std::cout << "Found. Index = " << index << "\n";
+    else
+        std::cout << "Not found\n";
+
+    /*
     std::cout << "Min index: " << ArrayMinIndex(array, size)
         << " Min value: " << ArrayMinValue(array, size) << "\n";
 
@@ -37,6 +58,7 @@ int main()
     
     ArraySortInsert(array, size);
     ArrayPrint(array, size);
+    */
 }   
 
 
@@ -225,4 +247,32 @@ void ArraySortInsert(int array[], int size)
                 break;
         array[j] = temp;
     }
+}
+
+int ArraySearchLine(int array[], int size, int key)
+{
+    for (int i{}; i < size; i++)
+        if (array[i] == key)
+            return i;
+    return -1;
+}
+
+int ArraySearchBin(int array[], int size, int key)
+{
+    int left{ 0 };
+    int right{ size - 1 };
+    int middle;
+
+    while (left <= right)
+    {
+        middle = (left + right) / 2;
+        if (key == array[middle])
+            return middle;
+        if (key > array[middle])
+            left = middle + 1;
+        else
+            right = middle - 1;
+    }
+
+    return -1;
 }
