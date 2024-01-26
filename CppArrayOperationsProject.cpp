@@ -16,6 +16,9 @@ void ArraySortBubble(int array[], int size);
 void ArraySortShacker(int array[], int size);
 void ArraySortInsert(int array[], int size);
 
+void ArraySortQuickRec(int array[], int begin, int end);
+void ArraySortQuick(int array[], int size);
+
 int ArraySearchLine(int array[], int size, int key);
 int ArraySearchBin(int array[], int size, int key);
 
@@ -23,11 +26,13 @@ int main()
 {
     srand(time(nullptr));
 
-    const int size{ 10 };
+    const int size{ 20 };
     int array[size];
 
     ArrayInit(array, size);
-    ArraySortShacker(array, size);
+    ArrayPrint(array, size);
+    //ArraySortShacker(array, size);
+    ArraySortQuick(array, size);
     ArrayPrint(array, size);
 
     int key;
@@ -55,11 +60,11 @@ int main()
 
     //int steps{ 123 };
     //steps = steps % size;
-    
+
     ArraySortInsert(array, size);
     ArrayPrint(array, size);
     */
-}   
+}
 
 
 void MinVars()
@@ -178,7 +183,7 @@ void ArraySortBubble(int array[], int size)
     for (int i{}; i < size - 1; i++)
     {
         isSort = true;
-        for(int j{size - 1}; j > i; j--)
+        for (int j{ size - 1 }; j > i; j--)
             if (array[j] < array[j - 1])
             {
                 temp = array[j];
@@ -195,7 +200,7 @@ void ArraySortShacker(int array[], int size)
 {
     int top{ 0 };
     int bottom{ size - 1 };
-    
+
     int temp;
     bool isSort;
 
@@ -249,6 +254,8 @@ void ArraySortInsert(int array[], int size)
     }
 }
 
+
+
 int ArraySearchLine(int array[], int size, int key)
 {
     for (int i{}; i < size; i++)
@@ -275,4 +282,38 @@ int ArraySearchBin(int array[], int size, int key)
     }
 
     return -1;
+}
+
+void ArraySortQuick(int array[], int size)
+{
+    ArraySortQuickRec(array, 0, size - 1);
+}
+
+void ArraySortQuickRec(int array[], int begin, int end)
+{
+    int pivot{ array[(begin + end) / 2] };
+    int left{ begin };
+    int right{ end };
+
+    int temp;
+
+    do
+    {
+        while (array[left] < pivot) left++;
+        while (array[right] > pivot) right--;
+
+        if (left <= right)
+        {
+            temp = array[left];
+            array[left] = array[right];
+            array[right] = temp;
+            left++;
+            right--;
+        }
+    } while (left <= right);
+
+    if (begin < right)
+        ArraySortQuickRec(array, begin, right);
+    if (left < end)
+        ArraySortQuickRec(array, left, end);
 }
